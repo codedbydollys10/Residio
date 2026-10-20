@@ -1,0 +1,132 @@
+.auth-body {
+    position: relative;
+    isolation: isolate;
+    overflow-x: hidden;
+    padding: 24px 16px;
+    background: #eaf1fb !important;
+}
+
+.auth-background-video,
+.auth-background-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.auth-background-video {
+    z-index: -2;
+    object-fit: cover;
+    object-position: center;
+    transform: scale(1.08);
+}
+
+.auth-background-overlay {
+    z-index: -1;
+    background: rgba(241, 246, 255, .68);
+}
+
+.auth-card {
+    position: relative;
+    z-index: 1;
+    flex: 0 1 auto;
+    margin: auto;
+    border: 1px solid rgba(100, 116, 139, .42) !important;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, .96);
+    backdrop-filter: blur(10px);
+    box-shadow: 0 20px 55px rgba(15, 23, 42, .16), 0 2px 8px rgba(15, 23, 42, .08) !important;
+}
+
+.auth-card .card-body {
+    padding: 1.5rem 1.75rem !important;
+}
+
+.auth-register-body {
+    align-items: flex-start !important;
+}
+
+.auth-register-body .auth-card {
+    margin-block: 0;
+}
+
+.auth-register-body .auth-card .card-body {
+    padding-block: 1.4rem !important;
+}
+
+.auth-register-body .auth-card .card-body > a:first-child {
+    margin-bottom: .5rem !important;
+}
+
+.auth-register-body .auth-card .text-center {
+    margin-bottom: .9rem !important;
+}
+
+.auth-register-body .auth-card .text-center > i {
+    font-size: 1.5rem !important;
+}
+
+.auth-register-body .auth-card .text-center h1 {
+    margin-top: .2rem !important;
+    font-size: 1.25rem;
+}
+
+.auth-register-body .auth-card .text-center p {
+    margin-bottom: 0;
+    font-size: .75rem !important;
+}
+
+.auth-register-body .auth-card form > h2 {
+    margin-bottom: .6rem !important;
+}
+
+.auth-register-body .auth-card form > h2.mt-4 {
+    margin-top: 1rem !important;
+}
+
+.auth-register-body .auth-card .row.g-3 {
+    --bs-gutter-y: .6rem;
+}
+
+.auth-register-body .auth-card .form-label {
+    margin-bottom: .2rem;
+}
+
+.auth-register-body .auth-card .form-check.my-3 {
+    margin-block: .7rem !important;
+}
+
+.auth-register-body .auth-card p.mt-4 {
+    margin-top: .75rem !important;
+}
+
+.auth-body .form-control,
+.auth-body .form-select {
+    min-height: 40px;
+}
+
+.auth-register-body .form-control,
+.auth-register-body .form-select {
+    min-height: 38px;
+}
+
+@media (max-width: 575.98px) {
+    .auth-body {
+        padding: 12px;
+    }
+
+    .auth-card .card-body {
+        padding: 1.25rem !important;
+    }
+
+    .auth-register-body .auth-card .card-body {
+        padding-block: 1.1rem !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .auth-background-video {
+        display: none;
+    }
+}
