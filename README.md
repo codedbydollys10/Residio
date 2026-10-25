@@ -1,297 +1,276 @@
-# Residio
+<div align="center">
 
-**One place to run a residential community.** Residio is a multi-tenant society and apartment management application with a staff workspace, a private resident portal, and a REST API.
+# 🏘️ Residio
 
-It brings day-to-day community operations together: manage buildings and residents, handle visitor entry, publish notices, collect maintenance, coordinate repairs, manage facilities, and keep residents informed.
+### The all-in-one platform for running residential societies & apartment communities
+
+<p>
+  <img src="https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel" />
+  <img src="https://img.shields.io/badge/PHP-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP" />
+  <img src="https://img.shields.io/badge/Blade-F55247?style=for-the-badge&logo=laravel&logoColor=white" alt="Blade" />
+  <img src="https://img.shields.io/badge/Sanctum_API-6C63FF?style=for-the-badge&logo=laravel&logoColor=white" alt="Sanctum" />
+  <img src="https://img.shields.io/badge/License-MIT-22C55E?style=for-the-badge" alt="MIT License" />
+</p>
+
+<p>
+  <img src="https://img.shields.io/badge/Multi--Tenant-Societies-0EA5E9?style=flat-square" />
+  <img src="https://img.shields.io/badge/Role--Based-Access-F59E0B?style=flat-square" />
+  <img src="https://img.shields.io/badge/Subscription-Plans-EC4899?style=flat-square" />
+  <img src="https://img.shields.io/badge/2FA-Supported-10B981?style=flat-square" />
+  <img src="https://img.shields.io/badge/Resident-Portal-8B5CF6?style=flat-square" />
+</p>
+
+</div>
 
 ---
 
-## At a glance
+## 📖 About
 
-- **Society workspace** for administrators, committee members, accountants, guards, and maintenance staff.
-- **Resident portal** for personal bills and bill documents, notices, delivered broadcasts, and conversations with management.
-- **Building group chats** for residents in the same tower or building.
-- **Multi-tenant access controls** to keep society records separated and restrict resident information to authorized users.
-- **Sanctum API** at `/api/v1` for authenticated API clients.
-- **Demo data** for trying the application locally.
+**Residio** is a web app for managing residential societies and apartment communities. Every society gets its own workspace for managing **homes, residents, staff, visitors, finances, maintenance, and communications**, while residents get a separate **portal** for their own bills, notices, and messages.
 
-## Portals and access
+On top of that there is a **Super Admin** workspace for operating the platform itself, and a **Sanctum-authenticated API** for client apps.
 
-### Society workspace
+> 🎛️ What each person sees depends on their **role**, their **permissions**, and the society's **subscription plan**.
 
-Society staff sign in at `/login`. What each person can do depends on their role and permissions. The seeded roles include Society Admin, Sub Admin, Accountant, Security Guard, Maintenance Staff, Resident, Tenant, Family Member, and Vendor.
+---
 
-The Society Admin can manage society settings, including the resident invite code, and administer the society's operations and people.
+## ✨ Features
 
-### Resident portal
+### 🏠 Society Setup & People
+| Module | What it does |
+|---|---|
+| 🏢 **Society Profile** | Name, city, state and location details used across the app |
+| 🏗️ **Towers & Flats** | Buildings, floors and units, with unit scaffolding when creating a tower |
+| 🅿️ **Parking Slots** | Track parking spaces and assignments |
+| 📁 **Documents** | Upload and manage society documents |
+| 👨‍👩‍👧 **Residents** | Resident records, family members, emergency contacts, exports |
+| 📒 **Resident Directory** | Directory view with permission-based export |
+| 🚗 **Vehicles** | Vehicles linked to resident accounts |
+| 🧑‍🔧 **Staff** | Staff records, plus attendance, shifts, leave and payroll when enabled |
 
-Residents sign in at `/resident-login` and open their portal at `/resident-portal`. The portal provides access to the signed-in resident's own bills and bill documents, relevant notices, delivered broadcasts, and conversations they participate in. Residents can contact management through portal messages.
+### 🛡️ Daily Operations
+| Module | What it does |
+|---|---|
+| 🚪 **Visitors** | Visitor passes, approve/reject requests, gate console for check-in/out |
+| 📣 **Complaints** | Open → Assigned → In progress → Resolved → Closed, with resident feedback |
+| 🏊 **Facilities & Bookings** | Manage shared facilities; approve, reject or cancel bookings |
+| 📌 **Notice Board** | Notices and polls that residents can view and vote on |
+| 🧰 **Assets** | Track assets and categories, recalculate depreciation, schedule maintenance |
+| 💬 **Building Group Chat** | Conversations tied to a specific building |
 
-The application applies authorization and tenant scoping on the server as well as in the interface. Residents should only be able to access records they are authorized to see; resident data is not intended to be a shared society-wide view.
+### 💰 Finance, Vendors & Support
+| Module | What it does |
+|---|---|
+| 🧾 **Maintenance Management** | Maintenance heads, bill generation, dues, payments, waivers, invoices and receipts |
+| 📚 **Accounting** | Accounts, bank/cash accounts, balanced journal entries, trial balance, P&L, balance sheet |
+| 🤝 **Vendors & Work Orders** | Vendor records, contracts, payments, ratings, work-order tracking |
+| 🎫 **Helpdesk** | Tickets, replies, assignment, escalation and closure |
+| 📊 **Reports** | Operational and financial reports with export and print |
 
-New residents can create an account at `/resident-register`. Registration requires the society's invite code and a valid building/flat selection. A society administrator can find the invite code in **Settings → General Settings**.
+### 📡 Communication & Settings
+- ✉️ **Direct messages, broadcasts and reusable templates**
+- 🔔 **Resident Portal messaging** limited to conversation participants
+- ⚙️ **General Settings**: currency, timezone, date format, support contact, and the **resident invite code**
+- 🔐 **Roles & permissions matrix** that the society admin can adjust
+- 👤 **Profile, password management and two-factor authentication**
 
-### Platform administration
+### 🌐 Dashboards & Directory
+- 📈 **Staff dashboard**: residents, units, occupancy, open complaints, today's visitors, pending dues, plus charts for collections, occupancy, visitors, complaints and facility usage
+- 🙋 **Resident dashboard**: personal bills and documents, unread messages, recent announcements
+- 🗺️ **Society Directory**: active societies with city/state filters (name and location only, no street address or contacts)
+- 📍 **Societies near you**: dashboard preview matching city and state
 
-The Super Admin workspace manages the platform side of the application, including societies, subscription plans, subscriptions, platform analytics, CMS pages, blog content, and contact inquiries.
+### 🦸 Platform Administration (Super Admin)
+Manage societies (suspend / impersonate), subscription plans and subscriptions, platform usage analytics, CMS pages and blog content, and contact inquiries.
 
-## Features
+---
 
-### Society and people
+## 🧭 How It Fits Together
 
-- Society profile and settings
-- Tower/building, floor, and flat/unit management
-- Parking slot management
-- Society documents
-- Resident, tenant, family-member, and staff records
-- Resident directory, emergency contacts, and vehicles
-- Role-based permissions for society teams
+```mermaid
+flowchart LR
+    SA[🦸 Super Admin] -->|manages| P[(Residio Platform)]
+    P --> S1[🏘️ Society Workspace]
+    S1 --> AD[🧑‍💼 Society Admin / Sub Admin]
+    S1 --> AC[🧮 Accountant]
+    S1 --> SG[💂 Security Guard]
+    S1 --> MS[🔧 Maintenance Staff]
+    S1 --> RP[🏡 Resident Portal]
+    RP --> R[Resident / Tenant / Family]
+    P --> API[🔌 Sanctum API]
+```
 
-### Daily operations
+---
 
-- Visitor passes, approvals, check-in/check-out, and gate workflow
-- Complaints with categories, assignment, status tracking, and SLA support
-- Facility listings and bookings, including image URLs or uploaded images
-- Notices, announcements, events, and polls
-- Community assets and maintenance schedules
-- Tower/building group conversations for residents in that building
-
-### Finance and administration
-
-- Maintenance heads, bill generation, invoices, receipts, collections, and due tracking
-- Accounting ledgers, journal entries, and financial reports
-- Vendor records, work orders, payments, and ratings
-- Staff attendance, shifts, leave, and payroll
-- Helpdesk tickets, replies, assignment, and escalation
-- Society reports for operational and financial activity
-
-### Communication
-
-- Management-to-resident conversations
-- Broadcasts and reusable communication templates
-- Resident portal messages
-- Building-specific group chats, with membership tied to the relevant building
-- Notices and broadcasts surfaced in the resident portal according to their audience
-
-### Platform controls
-
-- Multi-society administration
-- Subscription plans and feature availability
-- Role and permission management
-- Two-factor authentication
-- Audit and login history
-- Tenant-scoped web and API access
-
-Some modules are gated by the society's subscription plan. Available modules and actions can therefore vary by role and plan.
-
-## Technology stack
-
-| Area | Technologies |
-| --- | --- |
-| Application | PHP 8.2+, Laravel 12 |
-| Database | SQLite for local development; MySQL/MariaDB supported |
-| Web interface | Laravel Blade, Bootstrap 5, Bootstrap Icons |
-| Front-end behavior | JavaScript, jQuery, DataTables, Chart.js |
-| API authentication | Laravel Sanctum |
-| Queues and caching | Laravel queues and cache; database drivers for simple local use, Redis supported |
-| File storage | Laravel filesystem (local storage or S3-compatible storage) |
-| Asset tooling | Vite, Tailwind CSS packages, npm (for the `resources/` assets) |
-| Testing | PHPUnit and Laravel feature tests |
-
-The web layout currently loads Bootstrap, icons, DataTables, Chart.js, and jQuery from CDNs. The existing application styles and scripts are also served from `public/css` and `public/js`.
-
-## Get started locally
+## 🚀 Quick Start
 
 ### Requirements
+- PHP and [Composer](https://getcomposer.org/)
+- A database supported by Laravel (MySQL, SQLite, etc.)
+- Node.js and npm, if the project builds front-end assets
 
-- PHP **8.2 or newer**
-- Composer
-- SQLite with the PHP `pdo_sqlite` extension, or MySQL/MariaDB with the matching PHP PDO extension
-- Node.js and npm are optional for running the existing Blade UI; they are used when building the Vite-managed `resources/` assets
-
-### 1. Get the code and install PHP dependencies
+### Install
 
 ```bash
+# 1. Clone
 git clone https://github.com/codedbydollys10/Residio.git
 cd Residio
+
+# 2. Install dependencies
 composer install
-```
 
-### 2. Create your local environment file
-
-This repository intentionally does not include an `.env.example`. Create a new `.env` file in the project root and add the following local SQLite configuration:
-
-```dotenv
-APP_NAME=Residio
-APP_ENV=local
-APP_KEY=
-APP_DEBUG=true
-APP_URL=http://127.0.0.1:8000
-
-DB_CONNECTION=sqlite
-DB_DATABASE=database/database.sqlite
-
-SESSION_DRIVER=database
-CACHE_STORE=database
-QUEUE_CONNECTION=database
-MAIL_MAILER=log
-```
-
-Do not commit `.env`; it contains machine-specific configuration and secrets.
-
-### 3. Create the SQLite file, generate the app key, and prepare the database
-
-**PowerShell (Windows):**
-
-```powershell
-if (-not (Test-Path database\database.sqlite)) {
-    New-Item -ItemType File -Path database\database.sqlite | Out-Null
-}
+# 3. Configure environment
+cp .env.example .env
 php artisan key:generate
+# then set your database credentials in .env
+
+# 4. Create tables and seed demo data
 php artisan migrate --seed
-php artisan storage:link
-```
 
-**macOS/Linux:**
+# 5. (If the project uses compiled assets)
+npm install && npm run build
 
-```bash
-touch database/database.sqlite
-php artisan key:generate
-php artisan migrate --seed
-php artisan storage:link
-```
-
-The seed command creates platform roles and plans, a Green Valley demo society, sample accounts, and module demo data. To initialize an empty database without demo records, use `php artisan migrate` instead.
-
-### 4. Start the application
-
-```bash
+# 6. Run it
 php artisan serve
 ```
 
-Open [http://127.0.0.1:8000](http://127.0.0.1:8000).
+Open **http://127.0.0.1:8000** 🎉
 
-### 5. Sign in with demo accounts
-
-The demo seeders create these accounts with the same local-only password, **`Password@123`**:
-
-| Role | Email | Sign-in |
-| --- | --- | --- |
-| Society Admin | `admin@greenvalley.test` | `/login` |
-| Accountant | `accountant@greenvalley.test` | `/login` |
-| Security Guard | `guard@greenvalley.test` | `/login` |
-| Maintenance Staff | `maintenance@greenvalley.test` | `/login` |
-| Resident | `resident@greenvalley.test` | `/resident-login` |
-
-These are development/demo credentials only. Change or remove them before deploying an instance with real data. The demo resident account is separate from the self-registration flow.
-
-A platform Super Admin account is seeded as well; its configured email is defined in [`SuperAdminSeeder.php`](./database/seeders/SuperAdminSeeder.php).
-
-### Optional: use MySQL or MariaDB
-
-Create an empty database, then change the database settings in `.env`:
-
-```dotenv
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=residio
-DB_USERNAME=your_database_user
-DB_PASSWORD=your_database_password
-```
-
-Then run:
-
-```bash
-php artisan migrate --seed
-```
-
-Keep database credentials in your local or deployment environment; never add real credentials to source control.
-
-### Optional: build Vite-managed assets
-
-The standard Blade interface uses assets in `public/` and CDN-loaded libraries. If you are changing the Vite-managed files under `resources/`, install Node dependencies and build them:
-
-```bash
-npm install
-npm run build
-```
-
-For live asset development, run `npm run dev` in another terminal.
-
-## Background jobs and scheduled tasks
-
-For local development, the seeded notification and queued work can be processed in another terminal:
-
-```bash
-php artisan queue:work
-```
-
-The configured local `QUEUE_CONNECTION=database` stores queued jobs in the application database. For production, run a supervised queue worker and configure Laravel's scheduler to execute `php artisan schedule:run` every minute. Configure mail, storage, cache, and queue services for the environment you deploy to.
-
-## API
-
-The versioned API base path is `/api/v1`. It uses Laravel Sanctum bearer tokens for API clients. Authenticate at `POST /api/v1/auth/login`, then use the returned token for protected requests. API routes cover core operations such as residents, complaints, visitors, facilities, notices, maintenance, accounting, vendors, assets, helpdesk, communication, and reports; authorization and feature access are enforced by the application.
-
-## Tests
-
-Run the test suite with:
+### Run the tests
 
 ```bash
 php artisan test
 ```
 
-Or use Composer:
+---
 
-```bash
-composer test
-```
+## 🔑 Demo Accounts
 
-The PHPUnit configuration uses an in-memory SQLite database for tests. SQLite's PDO extension must be enabled in PHP.
+After seeding, these **local-only** accounts are available. All use the password **`Password@123`**.
 
-## Project structure
+| Role | Email | Login page |
+|---|---|---|
+| 🧑‍💼 Society Admin | `admin@greenvalley.test` | `/login` |
+| 🧮 Accountant | `accountant@greenvalley.test` | `/login` |
+| 💂 Security Guard | `guard@greenvalley.test` | `/login` |
+| 🔧 Maintenance Staff | `maintenance@greenvalley.test` | `/login` |
+| 🏡 Resident | `resident@greenvalley.test` | `/resident-login` |
+| 🦸 Super Admin | `super@communityos.io` | `/login` (password in `SuperAdminSeeder`) |
+
+> ⚠️ These credentials are for **local testing only**. Never use them in production.
+
+---
+
+## 🧑‍🤝‍🧑 Getting Started Guides
+
+### 🏛️ Create a society
+1. Go to `/register` or click **Start free trial** on the homepage.
+2. Enter the society name, city and state, pick a plan, and add the administrator's name, email and password.
+3. Submit. The society and admin account are created and you're signed in.
+
+### 🛠️ Recommended first setup (Society Admin)
+1. **Complete the Society Profile** (name, city, state).
+2. **Set up Towers & Flats** so residents have valid homes to register into.
+3. **Add people and staff**, and assign roles and permissions.
+4. **Configure Settings** (currency, timezone, date format, support contact).
+5. **Share the resident invite code** (found in General Settings).
+6. **Enable your workflows**: define maintenance heads before generating bills, add facilities before bookings, add vendors before work orders.
+7. **Review the dashboard and reports.**
+
+### 🏡 Resident / Tenant registration
+1. Get the **invite code** from your society admin.
+2. Go to `/resident-register`.
+3. Enter the code, choose **Owner** or **Tenant**, select your building and flat.
+4. Enter name, phone, email and password, then submit.
+
+The building and flat must exist in that society, and Owner registration is blocked if the flat already has an owner.
+
+### 🚪 Where to sign in
+| Who | URL |
+|---|---|
+| Society staff & admins | `/login` |
+| Residents & tenants | `/resident-login` |
+| Resident portal | `/resident-portal` |
+
+---
+
+## 👥 Roles & Permissions
+
+| Role | Purpose |
+|---|---|
+| 🦸 **Super Admin** | Platform-wide administration |
+| 🧑‍💼 **Society Admin** | Broad control within their society, including settings and access |
+| 🛡️ **Sub Admin** | Delegated society administration |
+| 🧮 **Accountant** | Billing and accounting |
+| 💂 **Security Guard** | Visitor and gate operations |
+| 🔧 **Maintenance Staff** | Assigned complaints and asset tasks |
+| 🏡 **Resident** | Resident-facing functions |
+| 🔑 **Tenant** | Resident-facing functions allowed for tenants |
+| 👨‍👩‍👧 **Family Member** | Limited resident-side access |
+| 🏪 **Vendor** | Vendor-side access |
+
+The module and role configuration lives in `config/communityos.php`.
+
+---
+
+## 💳 Plans & Feature Gates
+
+| Plan | Highlights |
+|---|---|
+| 🆓 **Free Trial** | 14 days, full feature catalog, up to 50 units |
+| 🌱 **Starter** | Visitors, complaints, notices, billing, communication |
+| 🚀 **Professional** | Adds facilities, assets, accounting, helpdesk, reports |
+| 🏆 **Enterprise** | All configured modules, no unit/user/storage caps in the seed config |
+
+A Super Admin can change plans and their features. If a module is missing from your navigation, it may be excluded by your **plan**, **role**, or **permissions**.
+
+> 💸 Residio records bills and payments, but **online payment collection requires a separately configured payment gateway**.
+
+---
+
+## 🗂️ Project Layout
 
 ```text
-app/
-  Http/Controllers/      Web, API, authentication, and platform controllers
-  Http/Middleware/       Tenant, subscription, feature, and permission checks
-  Http/Requests/         Request validation and authorization
-  Models/                Eloquent models and tenant-scoping concerns
-  Policies/              Record-level authorization
-  Services/              Business workflows and application logic
-  Repositories/          Persistence contracts and implementations
-  Events/ Listeners/     Domain events and their handlers
-  Jobs/ Notifications/   Background work and notifications
-  Support/Tenancy/       Current-tenant resolution
-bootstrap/               Laravel bootstrap and middleware configuration
-config/                  Application, roles, tenancy, and service settings
-database/
-  migrations/            Database schema
-  seeders/               Platform and demo data seeders
-  factories/              Test and model factories
-public/
-  css/ js/ images/        Public styles, scripts, and images
-resources/
-  views/                  Blade pages and shared layouts
-  css/ js/                Vite-managed source assets
-routes/
-  web/                    Society and platform web route modules
-  api/                    Versioned API route modules
-tests/
-  Feature/ Unit/          Application and unit tests
+Residio/
+├── app/Http/Controllers/     # Auth, society modules, super admin
+├── config/communityos.php    # Module, role and feature catalog
+├── database/seeders/         # Demo society, super admin, subscription plans
+├── resources/views/          # Blade views (dashboard, portal, auth, settings)
+├── routes/web/               # Per-module routes (visitors, accounting, ...)
+├── tests/Feature/            # Feature tests
+└── README.md
 ```
 
-Web and API feature routes are organized by module in `routes/web/` and `routes/api/`. The route loaders in `routes/web.php` and `routes/api.php` include these module files automatically.
+---
 
-## Deployment notes
+## 🧪 Tech Stack
 
-For a production deployment:
+- **Backend:** Laravel (PHP)
+- **Views:** Blade templates
+- **Auth/API:** Laravel Sanctum, with optional two-factor authentication
+- **Access control:** role and permission matrix plus subscription feature gates
+- **Testing:** `php artisan test`
 
-1. Set `APP_ENV=production`, `APP_DEBUG=false`, and the correct `APP_URL`.
-2. Use a production database and unique, securely managed credentials.
-3. Run `composer install --no-dev --optimize-autoloader`.
-4. Generate and protect `APP_KEY`; do not regenerate it for an existing installation.
-5. Run `php artisan migrate --force`.
-6. Configure durable storage, mail delivery, queues, and scheduled tasks as required.
-7. Point the web server document root to `public/` and enable HTTPS.
-8. Never seed demo accounts into a production database.
+---
+
+## 🤝 Contributing
+
+1. Fork the repo
+2. Create a branch: `git checkout -b feature/amazing-feature`
+3. Commit your changes: `git commit -m "Add amazing feature"`
+4. Push: `git push origin feature/amazing-feature`
+5. Open a Pull Request
+
+---
+
+## 📄 License
+
+Released under the **MIT License**. See [LICENSE](LICENSE) for details.
+
+<div align="center">
+
+Made with ❤️ by [@codedbydollys10](https://github.com/codedbydollys10)
+
+⭐ If Residio helps you, give it a star!
+
+</div>
