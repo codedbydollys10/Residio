@@ -43,16 +43,26 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label">Email</label>
-                <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" required>
+                <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" placeholder="name@example.com" autocomplete="email" required>
                 @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
             </div>
             <div class="col-md-6">
                 <label class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" required>
+                <div class="input-group">
+                    <input type="password" name="password" class="form-control" autocomplete="new-password" required>
+                    <button class="btn btn-outline-secondary" type="button" data-password-toggle aria-label="Show password" aria-pressed="false">
+                        <i class="bi bi-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
             <div class="col-md-6">
                 <label class="form-label">Confirm password</label>
-                <input type="password" name="password_confirmation" class="form-control" required>
+                <div class="input-group">
+                    <input type="password" name="password_confirmation" class="form-control" autocomplete="new-password" required>
+                    <button class="btn btn-outline-secondary" type="button" data-password-toggle aria-label="Show password" aria-pressed="false">
+                        <i class="bi bi-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
         </div>
 

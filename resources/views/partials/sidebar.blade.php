@@ -47,6 +47,13 @@
                     <i class="bi bi-speedometer2 me-2"></i> {{ $user->hasAnyRole(['resident', 'tenant']) ? 'Resident Portal' : 'Dashboard' }}
                 </a>
             </li>
+            @if ($society && ! $user->isSuperAdmin())
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('society-directory.*') ? 'active' : '' }}" href="{{ route('society-directory.index') }}">
+                        <i class="bi bi-buildings me-2"></i> Society Directory
+                    </a>
+                </li>
+            @endif
             @if ($user->hasAnyRole(['resident', 'tenant']) && feature_enabled('communication'))
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('resident.portal.messages', 'communication.messages.*') ? 'active' : '' }}" href="{{ route('resident.portal.messages') }}">

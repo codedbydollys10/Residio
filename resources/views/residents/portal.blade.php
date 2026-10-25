@@ -38,6 +38,8 @@
     </div>
 </div>
 
+@include('partials.society-directory-preview')
+
 <div class="row g-3">
     @if (feature_enabled('billing'))
     <div class="col-xl-7">

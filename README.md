@@ -1,117 +1,43 @@
-<div align="center">
+# Residio
 
-<!-- Optional: add a logo at public/images/residio-logo.png and uncomment -->
-<!-- <img src="public/images/residio-logo.png" alt="Residio logo" width="120" /> -->
+**One place to run a residential community.** Residio is a multi-tenant society and apartment management application with a staff workspace, a private resident portal, and a REST API.
 
-# 🏢 Residio
-
-### One place to run a residential community.
-
-A multi-tenant **society & apartment management** platform with a staff workspace,<br/>
-a private resident portal, and a versioned REST API.
-
-<br/>
-
-![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php&logoColor=white)
-![Laravel](https://img.shields.io/badge/Laravel-12-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
-![Bootstrap](https://img.shields.io/badge/Bootstrap-5-7952B3?style=for-the-badge&logo=bootstrap&logoColor=white)
-![SQLite](https://img.shields.io/badge/SQLite-Local-003B57?style=for-the-badge&logo=sqlite&logoColor=white)
-![MySQL](https://img.shields.io/badge/MySQL-Supported-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
-![Sanctum](https://img.shields.io/badge/API-Sanctum-FF2D20?style=for-the-badge&logo=laravel&logoColor=white)
-
-<br/>
-
-</div>
+It brings day-to-day community operations together: manage buildings and residents, handle visitor entry, publish notices, collect maintenance, coordinate repairs, manage facilities, and keep residents informed.
 
 ---
 
-## ✨ Overview
+## At a glance
 
-Residio brings day-to-day community operations into one application: manage buildings and residents, handle visitor entry, publish notices, collect maintenance, coordinate repairs, manage facilities, and keep residents informed.
+- **Society workspace** for administrators, committee members, accountants, guards, and maintenance staff.
+- **Resident portal** for personal bills and bill documents, notices, delivered broadcasts, and conversations with management.
+- **Building group chats** for residents in the same tower or building.
+- **Multi-tenant access controls** to keep society records separated and restrict resident information to authorized users.
+- **Sanctum API** at `/api/v1` for authenticated API clients.
+- **Demo data** for trying the application locally.
 
-<table>
-  <tr>
-    <td width="25%" align="center">🏛️<br/><b>Society Workspace</b><br/><sub>Admins, committee, accountants, guards, maintenance staff</sub></td>
-    <td width="25%" align="center">🏠<br/><b>Resident Portal</b><br/><sub>Bills, notices, broadcasts and messages with management</sub></td>
-    <td width="25%" align="center">💬<br/><b>Building Group Chats</b><br/><sub>Conversations for residents in the same tower</sub></td>
-    <td width="25%" align="center">🔐<br/><b>Multi-Tenant Security</b><br/><sub>Society records separated and access-controlled</sub></td>
-  </tr>
-  <tr>
-    <td align="center">🔌<br/><b>Sanctum API</b><br/><sub>Authenticated clients at <code>/api/v1</code></sub></td>
-    <td align="center">🧩<br/><b>Plan-Gated Modules</b><br/><sub>Features vary by subscription plan</sub></td>
-    <td align="center">🛡️<br/><b>2FA &amp; Audit Trail</b><br/><sub>Two-factor auth, login history, audit logs</sub></td>
-    <td align="center">🧪<br/><b>Demo Data</b><br/><sub>Seeded society and accounts for local testing</sub></td>
-  </tr>
-</table>
+## Portals and access
 
-<!--
-## 📸 Screenshots
-Add screenshots to docs/screenshots/ and uncomment this section.
+### Society workspace
 
-| Dashboard | Facilities | Resident Portal |
-| :---: | :---: | :---: |
-| ![Dashboard](docs/screenshots/dashboard.png) | ![Facilities](docs/screenshots/facilities.png) | ![Portal](docs/screenshots/portal.png) |
--->
-
----
-
-## 🚪 Portals &amp; Access
-
-| Portal | Who it's for | Sign-in route |
-| :-- | :-- | :-- |
-| 🏛️ **Society Workspace** | Society Admin, Sub Admin, Accountant, Security Guard, Maintenance Staff | `/login` |
-| 🏠 **Resident Portal** | Residents, tenants, family members | `/resident-login` → `/resident-portal` |
-| 📝 **Resident Registration** | New residents (invite code + valid building/flat required) | `/resident-register` |
-| 🛠️ **Platform Admin** | Super Admin (societies, plans, subscriptions, CMS, analytics) | `/login` |
-
-```mermaid
-flowchart LR
-    SA[Super Admin] -->|manages| P[(Platform)]
-    P --> S1[Society A]
-    P --> S2[Society B]
-    S1 --> W[Society Workspace]
-    S1 --> R[Resident Portal]
-    W -->|notices, broadcasts, bills| R
-    R -->|messages| W
-```
-
-<details>
-<summary><b>🏛️ Society Workspace details</b></summary>
-<br/>
-
-What each person can do depends on their role and permissions. Seeded roles: **Society Admin, Sub Admin, Accountant, Security Guard, Maintenance Staff, Resident, Tenant, Family Member, Vendor**.
+Society staff sign in at `/login`. What each person can do depends on their role and permissions. The seeded roles include Society Admin, Sub Admin, Accountant, Security Guard, Maintenance Staff, Resident, Tenant, Family Member, and Vendor.
 
 The Society Admin can manage society settings, including the resident invite code, and administer the society's operations and people.
 
-</details>
+### Resident portal
 
-<details>
-<summary><b>🏠 Resident Portal details</b></summary>
-<br/>
+Residents sign in at `/resident-login` and open their portal at `/resident-portal`. The portal provides access to the signed-in resident's own bills and bill documents, relevant notices, delivered broadcasts, and conversations they participate in. Residents can contact management through portal messages.
 
-Residents can access their own bills and bill documents, relevant notices, delivered broadcasts, and conversations they take part in. They can contact management through portal messages.
+The application applies authorization and tenant scoping on the server as well as in the interface. Residents should only be able to access records they are authorized to see; resident data is not intended to be a shared society-wide view.
 
-Authorization and tenant scoping are enforced **on the server as well as in the interface**. Residents only see records they are authorized to see; resident data is not a shared society-wide view.
+New residents can create an account at `/resident-register`. Registration requires the society's invite code and a valid building/flat selection. A society administrator can find the invite code in **Settings → General Settings**.
 
-> 💡 **Invite code:** a Society Admin can find it in **Settings → General Settings**.
+### Platform administration
 
-</details>
+The Super Admin workspace manages the platform side of the application, including societies, subscription plans, subscriptions, platform analytics, CMS pages, blog content, and contact inquiries.
 
-<details>
-<summary><b>🛠️ Platform Administration details</b></summary>
-<br/>
+## Features
 
-The Super Admin workspace manages societies, subscription plans, subscriptions, platform analytics, CMS pages, blog content, and contact inquiries.
-
-</details>
-
----
-
-## 🧰 Features
-
-<details open>
-<summary><b>👥 Society &amp; People</b></summary>
-<br/>
+### Society and people
 
 - Society profile and settings
 - Tower/building, floor, and flat/unit management
@@ -121,11 +47,7 @@ The Super Admin workspace manages societies, subscription plans, subscriptions, 
 - Resident directory, emergency contacts, and vehicles
 - Role-based permissions for society teams
 
-</details>
-
-<details open>
-<summary><b>🚧 Daily Operations</b></summary>
-<br/>
+### Daily operations
 
 - Visitor passes, approvals, check-in/check-out, and gate workflow
 - Complaints with categories, assignment, status tracking, and SLA support
@@ -134,11 +56,7 @@ The Super Admin workspace manages societies, subscription plans, subscriptions, 
 - Community assets and maintenance schedules
 - Tower/building group conversations for residents in that building
 
-</details>
-
-<details open>
-<summary><b>💰 Finance &amp; Administration</b></summary>
-<br/>
+### Finance and administration
 
 - Maintenance heads, bill generation, invoices, receipts, collections, and due tracking
 - Accounting ledgers, journal entries, and financial reports
@@ -147,23 +65,15 @@ The Super Admin workspace manages societies, subscription plans, subscriptions, 
 - Helpdesk tickets, replies, assignment, and escalation
 - Society reports for operational and financial activity
 
-</details>
-
-<details open>
-<summary><b>📣 Communication</b></summary>
-<br/>
+### Communication
 
 - Management-to-resident conversations
 - Broadcasts and reusable communication templates
 - Resident portal messages
 - Building-specific group chats, with membership tied to the relevant building
-- Notices and broadcasts surfaced in the portal according to their audience
+- Notices and broadcasts surfaced in the resident portal according to their audience
 
-</details>
-
-<details open>
-<summary><b>⚙️ Platform Controls</b></summary>
-<br/>
+### Platform controls
 
 - Multi-society administration
 - Subscription plans and feature availability
@@ -172,40 +82,34 @@ The Super Admin workspace manages societies, subscription plans, subscriptions, 
 - Audit and login history
 - Tenant-scoped web and API access
 
-</details>
+Some modules are gated by the society's subscription plan. Available modules and actions can therefore vary by role and plan.
 
-> ℹ️ Some modules are gated by the society's subscription plan, so available modules and actions can vary by role and plan.
-
----
-
-## 🧱 Technology Stack
+## Technology stack
 
 | Area | Technologies |
-| :-- | :-- |
-| **Application** | PHP 8.2+, Laravel 12 |
-| **Database** | SQLite (local development), MySQL/MariaDB supported |
-| **Web interface** | Laravel Blade, Bootstrap 5, Bootstrap Icons |
-| **Front-end behavior** | JavaScript, jQuery, DataTables, Chart.js |
-| **API authentication** | Laravel Sanctum |
-| **Queues & caching** | Laravel queues and cache (database drivers locally, Redis supported) |
-| **File storage** | Laravel filesystem (local or S3-compatible) |
-| **Asset tooling** | Vite, Tailwind CSS packages, npm (for `resources/` assets) |
-| **Testing** | PHPUnit and Laravel feature tests |
+| --- | --- |
+| Application | PHP 8.2+, Laravel 12 |
+| Database | SQLite for local development; MySQL/MariaDB supported |
+| Web interface | Laravel Blade, Bootstrap 5, Bootstrap Icons |
+| Front-end behavior | JavaScript, jQuery, DataTables, Chart.js |
+| API authentication | Laravel Sanctum |
+| Queues and caching | Laravel queues and cache; database drivers for simple local use, Redis supported |
+| File storage | Laravel filesystem (local storage or S3-compatible storage) |
+| Asset tooling | Vite, Tailwind CSS packages, npm (for the `resources/` assets) |
+| Testing | PHPUnit and Laravel feature tests |
 
-> The web layout loads Bootstrap, icons, DataTables, Chart.js, and jQuery from CDNs. Application styles and scripts are served from `public/css` and `public/js`.
+The web layout currently loads Bootstrap, icons, DataTables, Chart.js, and jQuery from CDNs. The existing application styles and scripts are also served from `public/css` and `public/js`.
 
----
-
-## 🚀 Quick Start
+## Get started locally
 
 ### Requirements
 
-- ✅ PHP **8.2 or newer**
-- ✅ Composer
-- ✅ SQLite with the `pdo_sqlite` extension, **or** MySQL/MariaDB with the matching PDO extension
-- ➕ Node.js and npm *(optional, only for Vite-managed `resources/` assets)*
+- PHP **8.2 or newer**
+- Composer
+- SQLite with the PHP `pdo_sqlite` extension, or MySQL/MariaDB with the matching PHP PDO extension
+- Node.js and npm are optional for running the existing Blade UI; they are used when building the Vite-managed `resources/` assets
 
-### 1️⃣ Get the code
+### 1. Get the code and install PHP dependencies
 
 ```bash
 git clone https://github.com/codedbydollys10/Residio.git
@@ -213,9 +117,9 @@ cd Residio
 composer install
 ```
 
-### 2️⃣ Create your `.env`
+### 2. Create your local environment file
 
-This repository intentionally does **not** include an `.env.example`. Create a new `.env` in the project root:
+This repository intentionally does not include an `.env.example`. Create a new `.env` file in the project root and add the following local SQLite configuration:
 
 ```dotenv
 APP_NAME=Residio
@@ -233,15 +137,11 @@ QUEUE_CONNECTION=database
 MAIL_MAILER=log
 ```
 
-> ⚠️ Never commit `.env`. It contains machine-specific configuration and secrets.
+Do not commit `.env`; it contains machine-specific configuration and secrets.
 
-### 3️⃣ Prepare the database
+### 3. Create the SQLite file, generate the app key, and prepare the database
 
-<table>
-<tr>
-<td width="50%" valign="top">
-
-**🪟 Windows (PowerShell)**
+**PowerShell (Windows):**
 
 ```powershell
 if (-not (Test-Path database\database.sqlite)) {
@@ -252,10 +152,7 @@ php artisan migrate --seed
 php artisan storage:link
 ```
 
-</td>
-<td width="50%" valign="top">
-
-**🍎🐧 macOS / Linux**
+**macOS/Linux:**
 
 ```bash
 touch database/database.sqlite
@@ -264,45 +161,35 @@ php artisan migrate --seed
 php artisan storage:link
 ```
 
-</td>
-</tr>
-</table>
+The seed command creates platform roles and plans, a Green Valley demo society, sample accounts, and module demo data. To initialize an empty database without demo records, use `php artisan migrate` instead.
 
-The seeder creates platform roles and plans, a **Green Valley** demo society, sample accounts, and module demo data. For an empty database without demo records, run `php artisan migrate` instead.
-
-### 4️⃣ Run it
+### 4. Start the application
 
 ```bash
 php artisan serve
 ```
 
-Open **http://127.0.0.1:8000** 🎉
+Open [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
-### 5️⃣ Sign in with demo accounts
+### 5. Sign in with demo accounts
 
-All demo accounts share the local-only password: **`Password@123`**
+The demo seeders create these accounts with the same local-only password, **`Password@123`**:
 
 | Role | Email | Sign-in |
-| :-- | :-- | :-- |
-| 🏛️ Society Admin | `admin@greenvalley.test` | `/login` |
-| 💼 Accountant | `accountant@greenvalley.test` | `/login` |
-| 💂 Security Guard | `guard@greenvalley.test` | `/login` |
-| 🔧 Maintenance Staff | `maintenance@greenvalley.test` | `/login` |
-| 🏠 Resident | `resident@greenvalley.test` | `/resident-login` |
+| --- | --- | --- |
+| Society Admin | `admin@greenvalley.test` | `/login` |
+| Accountant | `accountant@greenvalley.test` | `/login` |
+| Security Guard | `guard@greenvalley.test` | `/login` |
+| Maintenance Staff | `maintenance@greenvalley.test` | `/login` |
+| Resident | `resident@greenvalley.test` | `/resident-login` |
 
-> 🚨 **Development credentials only.** Change or remove them before deploying with real data. The demo resident is separate from the self-registration flow.
->
-> A platform Super Admin is also seeded; its email is defined in [`SuperAdminSeeder.php`](./database/seeders/SuperAdminSeeder.php).
+These are development/demo credentials only. Change or remove them before deploying an instance with real data. The demo resident account is separate from the self-registration flow.
 
----
+A platform Super Admin account is seeded as well; its configured email is defined in [`SuperAdminSeeder.php`](./database/seeders/SuperAdminSeeder.php).
 
-## 🔧 Optional Setup
+### Optional: use MySQL or MariaDB
 
-<details>
-<summary><b>🐬 Use MySQL or MariaDB</b></summary>
-<br/>
-
-Create an empty database, then update `.env`:
+Create an empty database, then change the database settings in `.env`:
 
 ```dotenv
 DB_CONNECTION=mysql
@@ -319,69 +206,50 @@ Then run:
 php artisan migrate --seed
 ```
 
-Keep database credentials in your local or deployment environment; never put real credentials in source control.
+Keep database credentials in your local or deployment environment; never add real credentials to source control.
 
-</details>
+### Optional: build Vite-managed assets
 
-<details>
-<summary><b>⚡ Build Vite-managed assets</b></summary>
-<br/>
-
-The standard Blade UI uses assets in `public/` and CDN libraries. If you change the Vite-managed files under `resources/`:
+The standard Blade interface uses assets in `public/` and CDN-loaded libraries. If you are changing the Vite-managed files under `resources/`, install Node dependencies and build them:
 
 ```bash
 npm install
 npm run build
 ```
 
-For live development, run `npm run dev` in another terminal.
+For live asset development, run `npm run dev` in another terminal.
 
-</details>
+## Background jobs and scheduled tasks
 
-<details>
-<summary><b>⏱️ Background jobs &amp; scheduled tasks</b></summary>
-<br/>
-
-For local development, process queued work in another terminal:
+For local development, the seeded notification and queued work can be processed in another terminal:
 
 ```bash
 php artisan queue:work
 ```
 
-`QUEUE_CONNECTION=database` stores queued jobs in the application database. In production, run a supervised queue worker and have Laravel's scheduler execute `php artisan schedule:run` every minute. Configure mail, storage, cache, and queue services for your environment.
+The configured local `QUEUE_CONNECTION=database` stores queued jobs in the application database. For production, run a supervised queue worker and configure Laravel's scheduler to execute `php artisan schedule:run` every minute. Configure mail, storage, cache, and queue services for the environment you deploy to.
 
-</details>
+## API
 
----
+The versioned API base path is `/api/v1`. It uses Laravel Sanctum bearer tokens for API clients. Authenticate at `POST /api/v1/auth/login`, then use the returned token for protected requests. API routes cover core operations such as residents, complaints, visitors, facilities, notices, maintenance, accounting, vendors, assets, helpdesk, communication, and reports; authorization and feature access are enforced by the application.
 
-## 🔌 API
+## Tests
 
-| | |
-| :-- | :-- |
-| **Base path** | `/api/v1` |
-| **Auth** | Laravel Sanctum bearer tokens |
-| **Login** | `POST /api/v1/auth/login` |
-
-Authenticate, then send the returned token with protected requests. Routes cover residents, complaints, visitors, facilities, notices, maintenance, accounting, vendors, assets, helpdesk, communication, and reports. Authorization and feature access are enforced by the application.
-
----
-
-## 🧪 Tests
+Run the test suite with:
 
 ```bash
 php artisan test
-# or
+```
+
+Or use Composer:
+
+```bash
 composer test
 ```
 
-PHPUnit uses an in-memory SQLite database, so the SQLite PDO extension must be enabled in PHP.
+The PHPUnit configuration uses an in-memory SQLite database for tests. SQLite's PDO extension must be enabled in PHP.
 
----
-
-## 🗂️ Project Structure
-
-<details>
-<summary><b>Expand folder layout</b></summary>
+## Project structure
 
 ```text
 app/
@@ -400,45 +268,30 @@ config/                  Application, roles, tenancy, and service settings
 database/
   migrations/            Database schema
   seeders/               Platform and demo data seeders
-  factories/             Test and model factories
+  factories/              Test and model factories
 public/
-  css/ js/ images/       Public styles, scripts, and images
+  css/ js/ images/        Public styles, scripts, and images
 resources/
-  views/                 Blade pages and shared layouts
-  css/ js/               Vite-managed source assets
+  views/                  Blade pages and shared layouts
+  css/ js/                Vite-managed source assets
 routes/
-  web/                   Society and platform web route modules
-  api/                   Versioned API route modules
+  web/                    Society and platform web route modules
+  api/                    Versioned API route modules
 tests/
-  Feature/ Unit/         Application and unit tests
+  Feature/ Unit/          Application and unit tests
 ```
 
-Routes are organized by module in `routes/web/` and `routes/api/`. The loaders in `routes/web.php` and `routes/api.php` include these files automatically.
+Web and API feature routes are organized by module in `routes/web/` and `routes/api/`. The route loaders in `routes/web.php` and `routes/api.php` include these module files automatically.
 
-</details>
+## Deployment notes
 
----
+For a production deployment:
 
-## 🌐 Deployment Notes
-
-- [ ] Set `APP_ENV=production`, `APP_DEBUG=false`, and the correct `APP_URL`
-- [ ] Use a production database with unique, securely managed credentials
-- [ ] Run `composer install --no-dev --optimize-autoloader`
-- [ ] Generate and protect `APP_KEY` (never regenerate it for an existing installation)
-- [ ] Run `php artisan migrate --force`
-- [ ] Configure durable storage, mail delivery, queues, and scheduled tasks
-- [ ] Point the web server document root to `public/` and enable HTTPS
-- [ ] **Never** seed demo accounts into a production database
-
----
-
-<div align="center">
-
-**Built with ❤️ by [Dolly Sharma](https://github.com/codedbydollys10)**
-
-[![GitHub](https://img.shields.io/badge/GitHub-codedbydollys10-181717?style=flat-square&logo=github)](https://github.com/codedbydollys10)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-dolly--sharma-0A66C2?style=flat-square&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/dolly-sharma-354b15328)
-
-⭐ If you find Residio useful, consider giving it a star!
-
-</div>
+1. Set `APP_ENV=production`, `APP_DEBUG=false`, and the correct `APP_URL`.
+2. Use a production database and unique, securely managed credentials.
+3. Run `composer install --no-dev --optimize-autoloader`.
+4. Generate and protect `APP_KEY`; do not regenerate it for an existing installation.
+5. Run `php artisan migrate --force`.
+6. Configure durable storage, mail delivery, queues, and scheduled tasks as required.
+7. Point the web server document root to `public/` and enable HTTPS.
+8. Never seed demo accounts into a production database.

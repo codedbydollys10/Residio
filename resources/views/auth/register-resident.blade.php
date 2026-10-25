@@ -58,17 +58,27 @@
             </div>
             <div class="col-md-6">
                 <label class="form-label" for="residentEmail">Email address</label>
-                <input id="residentEmail" name="email" type="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" autocomplete="email" required>
+                <input id="residentEmail" name="email" type="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" placeholder="name@example.com" autocomplete="email" required>
                 @error('email')<div class="invalid-feedback">{{ $message }}</div>@enderror
             </div>
             <div class="col-md-6">
                 <label class="form-label" for="residentPassword">Password</label>
-                <input id="residentPassword" name="password" type="password" class="form-control @error('password') is-invalid @enderror" autocomplete="new-password" minlength="8" required>
-                @error('password')<div class="invalid-feedback">{{ $message }}</div>@enderror
+                <div class="input-group">
+                    <input id="residentPassword" name="password" type="password" class="form-control @error('password') is-invalid @enderror" autocomplete="new-password" minlength="8" required>
+                    <button class="btn btn-outline-secondary" type="button" data-password-toggle aria-label="Show password" aria-pressed="false">
+                        <i class="bi bi-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
+                @error('password')<div class="invalid-feedback d-block">{{ $message }}</div>@enderror
             </div>
             <div class="col-md-6">
                 <label class="form-label" for="residentPasswordConfirmation">Confirm password</label>
-                <input id="residentPasswordConfirmation" name="password_confirmation" type="password" class="form-control" autocomplete="new-password" minlength="8" required>
+                <div class="input-group">
+                    <input id="residentPasswordConfirmation" name="password_confirmation" type="password" class="form-control" autocomplete="new-password" minlength="8" required>
+                    <button class="btn btn-outline-secondary" type="button" data-password-toggle aria-label="Show password" aria-pressed="false">
+                        <i class="bi bi-eye" aria-hidden="true"></i>
+                    </button>
+                </div>
             </div>
         </div>
 

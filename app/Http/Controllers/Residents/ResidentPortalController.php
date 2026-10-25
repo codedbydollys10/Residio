@@ -13,18 +13,24 @@ use App\Models\MaintenanceBillDocument;
 use App\Models\Notice;
 use App\Models\User;
 use App\Services\Communication\CommunicationService;
+use App\Services\Society\SocietyDirectory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ResidentPortalController extends Controller
 {
-    public function __construct(protected CommunicationService $communication) {}
+    public function __construct(
+        protected CommunicationService $communication,
+        protected SocietyDirectory $directory,
+    ) {}
 
     public function index(Request $request): View
     {
         $user = $request->user();
         $this->ensureResident($user);
+        $currentSociety = current_society();
+        $nearbySocieties = $this->directory->nearby($currentSociety);
 
         $isOwner = $user->hasRole('resident');
         $bills = feature_enabled('billing')
@@ -109,6 +115,8 @@ class ResidentPortalController extends Controller
             'broadcasts',
             'conversations',
             'unreadMessages',
+            'currentSociety',
+            'nearbySocieties',
         ));
     }
 

@@ -26,7 +26,7 @@ class Society extends Model
         'address_line1', 'address_line2', 'city', 'state', 'country', 'postal_code',
         'latitude', 'longitude', 'timezone', 'currency',
         'current_plan_id', 'subscription_status', 'trial_ends_at', 'subscription_ends_at',
-        'status', 'settings',
+        'status', 'settings', 'is_publicly_listed',
     ];
 
     protected function casts(): array
@@ -37,6 +37,7 @@ class Society extends Model
             'subscription_ends_at' => 'datetime',
             'latitude'             => 'float',
             'longitude'            => 'float',
+            'is_publicly_listed'   => 'boolean',
         ];
     }
 

@@ -6,14 +6,19 @@
         @csrf
         <div class="mb-3">
             <label class="form-label">Email address</label>
-            <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" required autofocus>
+            <input type="email" name="email" value="{{ old('email') }}" class="form-control @error('email') is-invalid @enderror" placeholder="name@example.com" autocomplete="username" required autofocus>
             @error('email') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
 
         <div class="mb-3">
             <label class="form-label">Password</label>
-            <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" required>
-            @error('password') <div class="invalid-feedback">{{ $message }}</div> @enderror
+            <div class="input-group">
+                <input type="password" name="password" class="form-control @error('password') is-invalid @enderror" autocomplete="current-password" required>
+                <button class="btn btn-outline-secondary" type="button" data-password-toggle aria-label="Show password" aria-pressed="false">
+                    <i class="bi bi-eye" aria-hidden="true"></i>
+                </button>
+            </div>
+            @error('password') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-3">

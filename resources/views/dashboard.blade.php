@@ -28,6 +28,8 @@
     @endforeach
 </div>
 
+@include('partials.society-directory-preview')
+
 <div class="row g-3 mt-1">
     <div class="col-lg-8">
         <div class="card h-100"><div class="card-body">

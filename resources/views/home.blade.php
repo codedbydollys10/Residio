@@ -124,8 +124,6 @@
                     @else
                         <a class="home-button home-button-primary home-button-large" href="{{ route('register') }}">Start free trial <i class="bi bi-arrow-right" aria-hidden="true"></i></a>
                         <a class="home-button home-button-ghost home-button-large" href="{{ route('login') }}">Sign in</a>
-                        <a class="home-button home-button-ghost home-button-large" href="{{ route('resident.login') }}">Resident sign in</a>
-                        <a class="home-button home-button-ghost home-button-large" href="{{ route('resident.register') }}">Resident registration</a>
                     @endauth
                 </div>
                 <p class="home-trust-line"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> 14-day full-feature trial <span aria-hidden="true">·</span> No card required</p>

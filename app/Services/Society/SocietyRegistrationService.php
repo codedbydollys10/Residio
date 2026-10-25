@@ -50,6 +50,7 @@ class SocietyRegistrationService
                 'trial_ends_at'       => $trialEndsAt,
                 'subscription_ends_at' => $trialEndsAt,
                 'status'              => 'active',
+                'is_publicly_listed'  => true,
             ]);
 
             // Per-tenant RBAC roles + default permission grants.

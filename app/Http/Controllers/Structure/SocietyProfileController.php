@@ -31,18 +31,18 @@ class SocietyProfileController extends Controller
         $society = current_society();
 
         $data = $request->validate([
-            'name'                => ['required', 'string', 'max:150'],
+            'name' => ['required', 'string', 'max:150'],
             'registration_number' => ['nullable', 'string', 'max:80'],
-            'email'               => ['nullable', 'email', 'max:150'],
-            'phone'               => ['nullable', 'string', 'max:20'],
-            'address_line1'       => ['nullable', 'string', 'max:200'],
-            'address_line2'       => ['nullable', 'string', 'max:200'],
-            'city'                => ['nullable', 'string', 'max:100'],
-            'state'               => ['nullable', 'string', 'max:100'],
-            'country'             => ['nullable', 'string', 'max:100'],
-            'postal_code'         => ['nullable', 'string', 'max:12'],
-            'timezone'            => ['nullable', 'string', 'max:64'],
-            'logo'                => ['nullable', 'image', 'max:2048'],
+            'email' => ['nullable', 'email', 'max:150'],
+            'phone' => ['nullable', 'string', 'max:20'],
+            'address_line1' => ['nullable', 'string', 'max:200'],
+            'address_line2' => ['nullable', 'string', 'max:200'],
+            'city' => ['nullable', 'string', 'max:100'],
+            'state' => ['nullable', 'string', 'max:100'],
+            'country' => ['nullable', 'string', 'max:100'],
+            'postal_code' => ['nullable', 'string', 'max:12'],
+            'timezone' => ['nullable', 'string', 'max:64'],
+            'logo' => ['nullable', 'image', 'max:2048'],
         ]);
 
         if ($request->hasFile('logo')) {
