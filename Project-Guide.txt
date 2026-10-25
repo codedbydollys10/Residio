@@ -1,0 +1,268 @@
+==============================================================================
+ RESIDIO - COMPLETE PROJECT GUIDE (plain text)
+==============================================================================
+
+WHAT IS RESIDIO?
+----------------
+Residio is a web app for running residential societies and apartment
+communities. Each society gets its own workspace for managing homes,
+residents, staff, visitors, finances, maintenance, and communications.
+Residents get a separate portal for their own bills, updates and messages.
+
+There is also a Super Admin workspace for operating the Residio platform
+itself, and a Sanctum-authenticated API for client apps.
+
+What each person sees depends on their role, permissions, and the society's
+subscription plan.
+
+Repository : https://github.com/codedbydollys10/Residio
+License    : MIT (see LICENSE)
+
+
+------------------------------------------------------------------------------
+1. INSTALLATION
+------------------------------------------------------------------------------
+Requirements: PHP 8.2+, Composer, SQLite with PHP's pdo_sqlite extension
+(or MySQL/MariaDB with the matching PDO extension), and Node.js/npm only if
+you build the Vite-managed front-end assets.
+
+  git clone https://github.com/codedbydollys10/Residio.git
+  cd Residio
+  composer install
+
+This repository intentionally does not include an .env.example. Create a
+new .env in the project root with local SQLite settings:
+
+  APP_NAME=Residio
+  APP_ENV=local
+  APP_KEY=
+  APP_DEBUG=true
+  APP_URL=http://127.0.0.1:8000
+  DB_CONNECTION=sqlite
+  DB_DATABASE=database/database.sqlite
+  SESSION_DRIVER=database
+  CACHE_STORE=database
+  QUEUE_CONNECTION=database
+  MAIL_MAILER=log
+
+PowerShell (Windows), from the project root:
+
+  if (-not (Test-Path database\database.sqlite)) {
+      New-Item -ItemType File -Path database\database.sqlite | Out-Null
+  }
+  php artisan key:generate
+  php artisan migrate --seed
+  php artisan storage:link
+
+For macOS/Linux, create the SQLite file with:
+
+  touch database/database.sqlite
+
+Then run the key generation, migration, seeding, and storage-link commands
+above, followed by:
+
+  php artisan serve
+
+Node.js/npm are optional for running the existing Blade interface. To build
+the Vite-managed assets, run npm install and npm run build.
+
+Local app: http://127.0.0.1:8000
+Run tests: php artisan test
+
+
+------------------------------------------------------------------------------
+2. SIGN-UP AND LOGIN
+------------------------------------------------------------------------------
+Create a society and its admin account:
+  1. Go to /register or choose "Start free trial" on the homepage.
+  2. Enter society name, city and state, choose a plan if desired, and enter
+     the administrator's name, email and password.
+  3. Submit. The society and admin are created and the admin is signed in.
+
+City and state matter for location-based info such as the "near you"
+dashboard preview. Keep them accurate.
+
+Sign in:
+  - Society staff and admins ..... /login
+  - Residents and tenants ........ /resident-login
+  - Resident portal .............. /resident-portal
+  - Password fields have an eye button to show or hide the text.
+
+
+------------------------------------------------------------------------------
+3. DEMO ACCOUNTS (LOCAL TESTING ONLY)
+------------------------------------------------------------------------------
+Password for all: Password@123
+
+  Society Admin ...... admin@greenvalley.test ........ /login
+  Accountant ......... accountant@greenvalley.test ... /login
+  Security Guard ..... guard@greenvalley.test ........ /login
+  Maintenance Staff .. maintenance@greenvalley.test .. /login
+  Resident ........... resident@greenvalley.test ..... /resident-login
+  Super Admin ........ super@communityos.io (see SuperAdminSeeder)
+
+Never use these credentials in production.
+
+
+------------------------------------------------------------------------------
+4. SOCIETY ADMIN - RECOMMENDED FIRST SETUP
+------------------------------------------------------------------------------
+  1. Complete Society Profile (name, location).
+  2. Set up Towers & Flats (buildings, floors, units).
+  3. Add people and staff; assign roles and permissions.
+  4. Configure Settings: currency, timezone, date format, support contact.
+     General Settings also shows the resident invite code.
+  5. Give residents the invite code.
+  6. Enable the workflows you use: define maintenance charges before
+     generating bills, add facilities before bookings, add staff/vendors
+     before assigning work.
+  7. Review the dashboard and reports.
+
+
+------------------------------------------------------------------------------
+5. RESIDENT / TENANT - GETTING STARTED
+------------------------------------------------------------------------------
+Register:
+  1. Ask the society admin for the resident invite code.
+  2. Go to /resident-register.
+  3. Enter the code, choose Owner or Tenant, select building and flat.
+  4. Enter name, phone, email and password, then submit.
+
+The code must be valid and the building and flat must exist in that society.
+Owner registration is blocked if the flat already has an owner. Successful
+registration signs the user in.
+
+Resident Portal (/resident-portal) can show, depending on what is enabled:
+  - Bills, due dates, balances, and bill-document PDFs
+  - Society notices and announcements
+  - Broadcasts delivered to the resident
+  - Conversations, including messages from management
+  - Dashboard preview of active societies in the same city and state
+
+Residents can also use enabled modules such as visitor requests, complaints,
+facility booking or helpdesk tickets if their account has permission.
+
+NOTE: The project manages bill records and payment collection, but an online
+payment gateway must be separately configured and integrated to accept
+payments online.
+
+
+------------------------------------------------------------------------------
+6. FEATURES BY AREA
+------------------------------------------------------------------------------
+DASHBOARD AND DIRECTORY
+  - Staff dashboard: residents, units, occupancy, open complaints, today's
+    visitors, pending dues; charts for collections, occupancy, visitors,
+    complaints and facility usage.
+  - Resident dashboard: personal bill and document counts, unread messages,
+    recent announcements.
+  - Society Directory: active societies with city/state filters; shows name
+    and location only (no street address or contacts). Duplicate society
+    names collapse to the newest active record.
+  - Societies near you: dashboard preview matching city and state.
+
+SOCIETY SETUP AND PEOPLE
+  - Society Profile ........ edit profile and location
+  - Towers & Flats ......... buildings, floors, units; unit scaffolding
+  - Parking Slots .......... parking spaces and assignments
+  - Documents .............. upload and manage society documents
+  - Residents .............. records, family members, emergency contacts,
+                             exports
+  - Resident Directory ..... directory view and permission-based export
+  - Vehicles ............... vehicles tied to resident accounts
+  - Staff .................. records; attendance, shifts, leave and payroll
+                             when enabled
+
+DAILY OPERATIONS
+  - Visitors ............... passes, approve/reject, gate console check-in
+                             and check-out; guards have gate permissions
+  - Complaints ............. open, assigned, in progress, resolved, closed;
+                             residents can give feedback
+  - Facilities & Bookings .. manage facilities; approve, reject, cancel
+  - Notice Board ........... notices and polls; residents can vote
+  - Assets ................. assets and categories, depreciation recalculation,
+                             maintenance scheduling and completion
+  - Building Group Chat .... conversations tied to a building
+
+FINANCE, VENDORS AND SUPPORT
+  - Maintenance Management . heads, bill generation, dues, collections,
+                             payments, waivers, invoices and receipts
+  - Accounting ............. accounts, bank/cash accounts, journal entries
+                             (must balance), trial balance, profit and loss,
+                             balance sheet
+  - Vendors & Work Orders .. vendor records, contracts, payments, ratings,
+                             work orders and status
+  - Helpdesk ............... tickets, replies, assignment, escalation, closure
+  - Reports ................ operational and financial reports; export/print
+
+COMMUNICATION AND SETTINGS
+  - Communication .......... direct messages, broadcasts, templates
+  - Resident Portal messages  residents contact management; conversations
+                             limited to participants
+  - General Settings ....... preferences and resident invite code
+  - Roles and permissions .. society admin can adjust the permission matrix
+  - Profile and security ... profile, password, two-factor authentication
+                             settings and verification challenge
+
+PLATFORM ADMINISTRATION (SUPER ADMIN)
+  - Manage societies, including suspension and impersonation
+  - Subscription plans and subscriptions
+  - Platform usage analytics
+  - CMS pages and blog content
+  - Contact inquiries
+
+
+------------------------------------------------------------------------------
+7. ROLES
+------------------------------------------------------------------------------
+Defined roles: Super Admin, Society Admin, Sub Admin, Accountant, Security
+Guard, Maintenance Staff, Resident, Tenant, Family Member, Vendor.
+
+  Super Admin ........ platform-wide administration
+  Society Admin ...... broad control in their society, incl. settings/access
+  Sub Admin .......... delegated society administration
+  Accountant ......... billing and accounting
+  Security Guard ..... visitor and gate operations
+  Maintenance Staff .. assigned complaints and asset tasks
+  Resident / Tenant .. resident-facing functions allowed for their account
+
+The app uses role permissions and subscription feature gates, so not every
+user or plan sees every module. The catalog lives in config/communityos.php.
+
+
+------------------------------------------------------------------------------
+8. SUBSCRIPTION PLANS (SEEDED)
+------------------------------------------------------------------------------
+  Free Trial .... 14 days, full feature catalog, up to 50 units
+  Starter ....... visitors, complaints, notices, billing, communication
+  Professional .. adds facilities, assets, accounting, helpdesk, reports
+  Enterprise .... all configured modules; no unit, user or storage caps in
+                  the seed configuration
+
+A Super Admin can change plans and features. A module missing from the
+navigation may be excluded by plan, role or permissions.
+
+
+------------------------------------------------------------------------------
+9. PROJECT LAYOUT
+------------------------------------------------------------------------------
+  app/Http/Controllers/    controllers (auth, modules, super admin)
+  config/communityos.php   module, role and feature catalog
+  database/seeders/        DemoSocietySeeder, SuperAdminSeeder,
+                           SubscriptionPlanSeeder
+  resources/views/         Blade views
+  routes/web/              per-module route files (visitors, structure,
+                           residents, maintenance, accounting, complaints,
+                           facilities, communication, staff, vendors, assets,
+                           helpdesk, notices, reports, settings, superadmin)
+  tests/Feature/           feature tests
+
+
+------------------------------------------------------------------------------
+10. LICENSE
+------------------------------------------------------------------------------
+MIT License. Copyright (c) 2026 codedbydollys10. See the LICENSE file.
+
+==============================================================================
+ Made by @codedbydollys10
+==============================================================================
