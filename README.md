@@ -269,7 +269,6 @@ Released under the **MIT License**. See [LICENSE](LICENSE) for details.
 
 <div align="center">
 
-Made with ❤️ by [@codedbydollys10](https://github.com/codedbydollys10)
 
 ⭐ If Residio helps you, give it a star!
 
