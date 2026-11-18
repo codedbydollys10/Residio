@@ -158,6 +158,46 @@
             </div>
         </div>
 
+        {{-- Resident payment submissions --}}
+        @if ($bill->paymentSubmissions->isNotEmpty())
+        <div class="card shadow-sm mb-3">
+            <div class="card-header py-2">
+                <h3 class="h6 mb-0">Resident payment submissions</h3>
+            </div>
+            <div class="card-body">
+                @foreach ($bill->paymentSubmissions as $submission)
+                    <div class="d-flex justify-content-between align-items-start gap-3 py-2 border-bottom">
+                        <div>
+                            <div class="fw-semibold small">
+                                {{ money($submission->amount) }} via {{ str_replace('_', ' ', strtoupper($submission->method)) }}
+                                <span class="badge text-bg-{{ $submission->status === 'approved' ? 'success' : ($submission->status === 'rejected' ? 'danger' : 'warning') }} text-capitalize">{{ $submission->status }}</span>
+                            </div>
+                            <div class="text-muted small">
+                                {{ $submission->resident?->name ?? 'Resident' }} · Ref: {{ $submission->reference }}
+                                · Submitted {{ $submission->created_at?->format('d M Y H:i') }}
+                            </div>
+                            @if ($submission->review_notes)
+                                <div class="text-muted small">{{ $submission->review_notes }}</div>
+                            @endif
+                        </div>
+                        @if ($submission->status === 'pending' && auth()->user()->can('maintenance.collect'))
+                            <div class="d-flex gap-2">
+                                <form method="POST" action="{{ route('maintenance.payment-submissions.approve', [$bill, $submission]) }}" data-confirm="Verify this transfer and record the payment?">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                </form>
+                                <form method="POST" action="{{ route('maintenance.payment-submissions.reject', [$bill, $submission]) }}">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">Reject</button>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         {{-- Late Fees --}}
         @if ($bill->lateFees->count())
         <div class="card shadow-sm">
@@ -206,12 +246,61 @@
             <a href="{{ route('maintenance.invoice', $bill) }}" class="btn btn-outline-primary" target="_blank">
                 <i class="bi bi-file-earmark-text"></i> View Invoice
             </a>
+            @if ((int) auth()->id() === (int) $bill->user_id && $bill->balance > 0 && !in_array($bill->status, ['paid', 'cancelled']))
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#residentPaymentModal">
+                    <i class="bi bi-cash-coin"></i> Pay / Report Transfer
+                </button>
+            @endif
             <a href="{{ route('maintenance.index') }}" class="btn btn-outline-secondary">
                 <i class="bi bi-arrow-left"></i> Back to Bills
             </a>
         </div>
     </div>
 </div>
+
+{{-- Resident offline payment submission --}}
+@if ((int) auth()->id() === (int) $bill->user_id && $bill->balance > 0 && !in_array($bill->status, ['paid', 'cancelled']))
+<div class="modal fade" id="residentPaymentModal" tabindex="-1">
+    <div class="modal-dialog">
+        <form method="POST" action="{{ route('maintenance.payment-submissions.store', $bill) }}">
+            @csrf
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Report an offline payment</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-info small">
+                        Outstanding balance: <strong>{{ money($bill->balance) }}</strong>.
+                        Your bill remains unpaid until society staff verifies your transfer.
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="submissionAmount">Amount paid</label>
+                        <input id="submissionAmount" type="number" step="0.01" min="0.01" max="{{ $bill->balance }}"
+                               name="amount" value="{{ old('amount', $bill->balance) }}" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="submissionMethod">Payment method</label>
+                        <select id="submissionMethod" name="method" class="form-select" required>
+                            <option value="upi" @selected(old('method') === 'upi')>UPI</option>
+                            <option value="bank_transfer" @selected(old('method') === 'bank_transfer')>Bank transfer</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="submissionReference">UPI transaction ID / bank reference</label>
+                        <input id="submissionReference" type="text" name="reference" value="{{ old('reference') }}"
+                               maxlength="180" class="form-control" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-success">Submit for verification</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@endif
 
 {{-- Record Payment Modal --}}
 @can('collect', $bill)

@@ -1,8 +1,9 @@
 <?php
 
 use App\Http\Controllers\Maintenance\HeadController;
-use App\Http\Controllers\Maintenance\MaintenanceController;
 use App\Http\Controllers\Maintenance\MaintenanceBillDocumentController;
+use App\Http\Controllers\Maintenance\MaintenanceController;
+use App\Http\Controllers\Maintenance\MaintenancePaymentSubmissionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,10 @@ Route::middleware('feature:billing')->group(function () {
     Route::get('resident/maintenance-bills', [MaintenanceBillDocumentController::class, 'residentBills'])->name('resident.bills.index');
     Route::get('resident/maintenance-bills/{document}/preview', [MaintenanceBillDocumentController::class, 'preview'])->name('resident.bills.preview');
     Route::get('resident/maintenance-bills/{document}/download', [MaintenanceBillDocumentController::class, 'download'])->name('resident.bills.download');
+    Route::get('resident/maintenance-bills/{bill}/invoice.pdf', [MaintenanceBillDocumentController::class, 'downloadResidentBill'])->name('resident.bills.generated.download');
+    Route::post('maintenance/bills/{bill}/payment-submissions', [MaintenancePaymentSubmissionController::class, 'store'])->name('maintenance.payment-submissions.store');
+    Route::post('maintenance/bills/{bill}/payment-submissions/{submission}/approve', [MaintenancePaymentSubmissionController::class, 'approve'])->name('maintenance.payment-submissions.approve');
+    Route::post('maintenance/bills/{bill}/payment-submissions/{submission}/reject', [MaintenancePaymentSubmissionController::class, 'reject'])->name('maintenance.payment-submissions.reject');
     // Generate bills
     Route::get('maintenance/generate', [MaintenanceController::class, 'generateForm'])->name('maintenance.generate');
     Route::post('maintenance/generate', [MaintenanceController::class, 'generate'])->name('maintenance.generate.post');

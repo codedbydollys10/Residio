@@ -17,9 +17,7 @@ use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
- * Admin/accountant Blade screens for maintenance billing – the bulk
- * bill-generation run, payment collection and CSV exports. Residents never
- * reach here; they go through the API BillController instead.
+ * Society staff billing screens, plus read-only access to a resident's own bill.
  */
 class MaintenanceController extends Controller
 {
@@ -49,7 +47,7 @@ class MaintenanceController extends Controller
     public function show(MaintenanceBill $bill): View
     {
         $this->authorize('view', $bill);
-        $bill->load(['flat', 'resident', 'payments.recorder', 'lateFees']);
+        $bill->load(['flat', 'resident', 'payments.recorder', 'lateFees', 'paymentSubmissions.resident', 'paymentSubmissions.reviewer']);
 
         return view('maintenance.bills.show', [
             'bill' => $bill,

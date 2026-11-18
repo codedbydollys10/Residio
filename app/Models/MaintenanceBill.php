@@ -54,6 +54,11 @@ class MaintenanceBill extends Model
         return $this->hasMany(MaintenancePayment::class);
     }
 
+    public function paymentSubmissions(): HasMany
+    {
+        return $this->hasMany(MaintenancePaymentSubmission::class, 'maintenance_bill_id');
+    }
+
     public function lateFees(): HasMany
     {
         return $this->hasMany(LateFee::class);

@@ -4,13 +4,58 @@
 @section('content')
 <div class="card shadow-sm">
     <div class="card-body">
-        @if ($documents->isEmpty())
+        @if ($bills->isEmpty() && $documents->isEmpty())
             <div class="text-center py-5">
                 <i class="bi bi-file-earmark-pdf display-5 text-muted"></i>
-                <h2 class="h5 mt-3">No maintenance PDFs yet</h2>
-                <p class="text-muted mb-0">Your society's published bill documents for your account will appear here.</p>
+                <h2 class="h5 mt-3">No maintenance bills yet</h2>
+                <p class="text-muted mb-0">Bills generated for your flat and documents published by your society will appear here.</p>
             </div>
-        @else
+        @endif
+
+        @if ($bills->isNotEmpty())
+            <h2 class="h5 mb-3">Maintenance bills</h2>
+            <div class="table-responsive"><table class="table table-hover align-middle">
+                <thead><tr><th>Bill number</th><th>Billing period</th><th>Flat</th><th>Due date</th><th>Total</th><th>Balance</th><th>Status</th><th>Actions</th></tr></thead>
+                <tbody>
+                @foreach ($bills as $bill)
+                    @php
+                        $statusColors = [
+                            'unpaid' => 'warning',
+                            'partial' => 'info',
+                            'paid' => 'success',
+                            'overdue' => 'danger',
+                            'cancelled' => 'secondary',
+                        ];
+                    @endphp
+                    <tr>
+                        <td class="fw-semibold">{{ $bill->bill_number }}</td>
+                        <td>{{ \Illuminate\Support\Carbon::createFromFormat('Y-m', $bill->period)->format('F Y') }}</td>
+                        <td>{{ $bill->flat?->label ?? $bill->flat?->number ?? '—' }}</td>
+                        <td>{{ $bill->due_date?->format('d M Y') ?? '—' }}</td>
+                        <td>{{ money($bill->total) }}</td>
+                        <td class="{{ $bill->balance > 0 ? 'text-danger fw-semibold' : 'text-success' }}">{{ money($bill->balance) }}</td>
+                        <td>
+                            <span class="badge text-bg-{{ $statusColors[$bill->status] ?? 'secondary' }} text-capitalize">{{ $bill->status }}</span>
+                            @if ($bill->paymentSubmissions->contains('status', 'pending'))
+                                <span class="badge text-bg-info">Payment under review</span>
+                            @endif
+                        </td>
+                        <td class="text-nowrap">
+                            <a class="btn btn-sm btn-outline-primary" href="{{ route('maintenance.bills.show', $bill) }}">View bill</a>
+                            <a class="btn btn-sm btn-outline-secondary" href="{{ route('resident.bills.generated.download', $bill) }}">Download PDF</a>
+                            @if ($bill->balance > 0 && !in_array($bill->status, ['paid', 'cancelled']))
+                                <a class="btn btn-sm btn-outline-success" href="{{ route('maintenance.bills.show', $bill) }}#report-payment">Pay / report transfer</a>
+                            @endif
+                        </td>
+                    </tr>
+                @endforeach
+                </tbody>
+            </table></div>
+            {{ $bills->links() }}
+        @endif
+
+        @if ($documents->isNotEmpty())
+            <h2 class="h5 mt-4 mb-3">Published bill documents</h2>
             <div class="table-responsive"><table class="table table-hover align-middle">
                 <thead><tr><th>Billing period</th><th>Flat</th><th>Bill document</th><th>Reference</th><th>Published</th><th>Status</th><th>Actions</th></tr></thead>
                 <tbody>

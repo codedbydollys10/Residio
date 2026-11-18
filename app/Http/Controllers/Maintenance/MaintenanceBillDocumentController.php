@@ -6,10 +6,12 @@ namespace App\Http\Controllers\Maintenance;
 
 use App\Http\Controllers\Controller;
 use App\Models\Flat;
+use App\Models\MaintenanceBill;
 use App\Models\MaintenanceBillDocument;
 use App\Models\Society;
 use App\Models\Tower;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -100,15 +102,23 @@ class MaintenanceBillDocumentController extends Controller
     public function residentBills(Request $request): View
     {
         $user = $request->user();
+        $bills = MaintenanceBill::query()
+            ->where('society_id', $user->society_id)
+            ->where('user_id', $user->id)
+            ->with(['flat', 'paymentSubmissions'])
+            ->latest('period')
+            ->paginate(15, ['*'], 'bills_page');
+
         $documents = MaintenanceBillDocument::query()
             ->where('society_id', $user->society_id)
             ->where('resident_user_id', $user->id)
             ->where('status', 'available')
             ->with(['flat', 'supersedes'])
             ->latest('published_at')
-            ->paginate(15);
+            ->paginate(15, ['*'], 'documents_page');
 
         return view('maintenance.documents.resident', [
+            'bills' => $bills,
             'documents' => $documents,
             'secretary' => User::query()
                 ->where('society_id', $user->society_id)
@@ -119,6 +129,19 @@ class MaintenanceBillDocumentController extends Controller
         ]);
     }
 
+    public function downloadResidentBill(Request $request, MaintenanceBill $bill)
+    {
+        $this->authorizeResidentBillAccess($request, $bill);
+        $bill->load(['flat', 'resident', 'lateFees']);
+
+        $pdf = Pdf::loadView('maintenance.bills.resident-pdf', [
+            'bill' => $bill,
+            'society' => Society::query()->find($bill->society_id),
+        ])->setPaper('a4');
+
+        return $pdf->download('bill-'.$bill->bill_number.'.pdf');
+    }
+
     private function authorizeDocumentAccess(Request $request, MaintenanceBillDocument $document): void
     {
         $isSecretary = $request->user()->can('maintenance.create')
@@ -126,6 +149,15 @@ class MaintenanceBillDocumentController extends Controller
         $isRecipient = (int) $request->user()->id === (int) $document->resident_user_id
             && (int) $request->user()->society_id === (int) $document->society_id;
         abort_unless($document->status !== 'cancelled' && ($isSecretary || $isRecipient), 404);
+    }
+
+    private function authorizeResidentBillAccess(Request $request, MaintenanceBill $bill): void
+    {
+        abort_unless(
+            (int) $request->user()->id === (int) $bill->user_id
+            && (int) $request->user()->society_id === (int) $bill->society_id,
+            404,
+        );
     }
 
     private function societyId(Request $request): int

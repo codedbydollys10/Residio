@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature\Maintenance;
 
 use App\Models\Flat;
+use App\Models\MaintenanceBill;
 use App\Models\MaintenanceBillDocument;
 use App\Models\Society;
 use App\Models\Tower;
@@ -42,6 +43,27 @@ class MaintenanceBillDocumentTest extends TestCase
         $this->get(route('resident.bills.download', $documentA))->assertOk();
         $this->get(route('resident.bills.preview', $documentB))->assertNotFound();
         $this->get(route('resident.bills.download', $documentB))->assertNotFound();
+    }
+
+    public function test_resident_can_view_and_download_only_their_generated_maintenance_bills(): void
+    {
+        $society = $this->makeSociety('Generated Bill Society', 'generated-bill@test.com');
+        $residentA = $this->makeUser($society, 'resident', ['email' => 'generated-a@test.com']);
+        $residentB = $this->makeUser($society, 'resident', ['email' => 'generated-b@test.com']);
+        $billA = $this->makeBill($society, $residentA, 'GENERATED-A-1');
+        $billB = $this->makeBill($society, $residentB, 'GENERATED-B-1');
+
+        $this->actingAs($residentA)
+            ->get(route('resident.bills.index'))
+            ->assertOk()
+            ->assertSee($billA->bill_number)
+            ->assertSee(route('resident.bills.generated.download', $billA), false)
+            ->assertDontSee($billB->bill_number);
+
+        $this->get(route('resident.bills.generated.download', $billA))
+            ->assertOk()
+            ->assertHeader('content-type', 'application/pdf');
+        $this->get(route('resident.bills.generated.download', $billB))->assertNotFound();
     }
 
     public function test_non_secretary_cannot_open_society_contact_directory(): void
@@ -137,6 +159,23 @@ class MaintenanceBillDocumentTest extends TestCase
             'file_size' => 18,
             'status' => 'available',
             'published_at' => now(),
+        ]);
+    }
+
+    private function makeBill(Society $society, User $resident, string $number): MaintenanceBill
+    {
+        return MaintenanceBill::create([
+            'society_id' => $society->id,
+            'bill_number' => $number,
+            'user_id' => $resident->id,
+            'period' => '2026-10',
+            'bill_date' => now()->toDateString(),
+            'due_date' => now()->addDays(10)->toDateString(),
+            'subtotal' => 1000,
+            'total' => 1000,
+            'paid_amount' => 0,
+            'status' => 'unpaid',
+            'line_items' => [['head' => 'Monthly maintenance', 'type' => 'fixed', 'amount' => 1000, 'tax' => 0]],
         ]);
     }
 
