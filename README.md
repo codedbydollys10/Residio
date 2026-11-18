@@ -224,7 +224,7 @@ The module and role configuration lives in `config/communityos.php`.
 
 A Super Admin can change plans and their features. If a module is missing from your navigation, it may be excluded by your **plan**, **role**, or **permissions**.
 
-> 💸 Residio records bills and payments, but **online payment collection requires a separately configured payment gateway**.
+> 💸 Residents can download generated maintenance bills and submit UPI/bank-transfer references for society verification. A submitted transfer is not credited until approved. **Online payment collection requires a separately configured payment gateway**.
 
 ---
 
